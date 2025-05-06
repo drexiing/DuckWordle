@@ -1,4 +1,4 @@
-# DuckWordle
+# DuckWordle 🦆
 
 <img alt="Pato" src="./assets/images/duck.png" width="300" height="300">
 
