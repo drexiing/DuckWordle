@@ -3,7 +3,9 @@ import io
 import re
 import sys
 import random
+
 from colorama import Fore
+from tkinter import Label, font, StringVar
 
 def read_words():
     """
@@ -17,8 +19,8 @@ def read_words():
         SystemExit: If either 'duck_words.txt' or 'es_words.txt' is not found in the './assets/' directory.
     """
     words = []
-    duck_words_path = "./assets/duck_words.txt"
-    es_words_path = "./assets/es_words.txt"
+    duck_words_path = "./assets/data/duck_words.txt"
+    es_words_path = "./assets/data/es_words.txt"
 
     if not os.path.exists(duck_words_path):
         print(Fore.RED + "El archivo 'duck_words.txt' no se ha encontrado en la carpeta de assets.")
@@ -57,3 +59,79 @@ def word_filter(file: io.TextIOWrapper):
     lines = [line.strip() for line in file if line.strip()]
     filtered = [line for line in lines if len(line) == 5 and not re.search("[áéíóú]", line)]
     return filtered
+
+def limit(text: StringVar):
+    """
+    Limits the text length of the text input.
+
+    Parameters:
+        text (`tk.StringVar()`): The text string variable.
+    """
+    if len(text.get()) > 0:
+        text.set(text.get()[:5])
+
+def color_match(self, guess: str):
+    """
+    Checks which characters in the user's word match the hidden word,
+    and changes the colors of the boxes.
+
+    Parameters:
+        self (`self`): The instance of DuckWordle class.
+        guess (`str`): The guessed word.
+    """
+    char_list = list(self.hidden_word)
+    edited_word = ""
+    
+    for c1, c2 in zip(self.hidden_word, guess):
+        if c1 == c2:
+            edited_word += c1
+        else:
+            edited_word += "#"
+
+    for i, (c1, c2) in enumerate(zip(self.hidden_word, guess)):
+        self.boxes = Label(
+            self.boxes_frame, width=4, height=2, bg=self.gray,
+            text=c2.upper(), font=font.Font(family="Arial", size=15, weight="bold"),
+            fg="white", highlightthickness=2, highlightbackground=self.gray
+        )
+        self.boxes.grid(column=i, row=self.row, padx=3, pady=3)
+        
+        # Right position (green)
+        if c1 == c2:
+            self.boxes["bg"] = self.green
+            self.boxes["highlightbackground"] = self.green
+            continue
+
+        # Not in hidden word (gray)
+        if (c2 not in self.hidden_word) or (char_list.count(c2) <= edited_word.count(c2)):
+            continue
+
+        # Bad position in hidden word (yellow)
+        self.boxes["bg"] = self.yellow
+        self.boxes["highlightbackground"] = self.yellow
+        char_list.remove(c2)
+
+def autoupper(text: StringVar):
+    """
+    Automatically uppers the text input.
+
+    Parameters:
+        text (`tk.StringVar()`): The text string variable.
+    """
+    text.set(text.get().upper())
+
+def remove_non_letters(text: StringVar):
+    """
+    Removes the non-alphabetical characters.
+
+    Parameters:
+        text (`tk.StringVar()`): The text string variable.
+    """
+    value = text.get()
+    if not value:
+        return
+
+    allowed_chars = "abcdefghijklmnñopqrstuvwxyz"
+
+    if value[-1].lower() not in allowed_chars:
+        text.set(value[:-1])
