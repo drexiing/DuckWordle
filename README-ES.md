@@ -1,6 +1,6 @@
 # DuckWordle
 
-<img alt="Pato" src="./assets/images/duck.png" width="1024" height="1024">
+<img alt="Pato" src="./assets/images/duck.png" width="300" height="300">
 
 ## Acerca de
 
