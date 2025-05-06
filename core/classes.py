@@ -1,3 +1,4 @@
+from pygame import mixer
 from tkinter import Frame, StringVar, Label, Button, Entry, messagebox, font, PhotoImage
 from core.utils import *
 
@@ -15,6 +16,7 @@ class DuckWordle(Frame):
         self.guess.trace_add("write", lambda *args: remove_non_letters(self.guess))
         self.words, self.hidden_word = read_words()
         self.create_widgets()
+        mixer.init()
 
     def create_widgets(self):
         self.label = Label(
@@ -71,12 +73,19 @@ class DuckWordle(Frame):
         if self.row <= 6:
             color_match(self, guess)
 
-        self.row = self.row + 1
-        if self.row <= 6 and self.hidden_word == guess:
-            messagebox.showinfo("Ganaste", "¡Felicidades! Ganaste el DuckWordle")
-            self.master.destroy()
-            self.master.quit()
-        elif self.row == 6 and self.hidden_word != guess:
-            messagebox.showinfo("Perdiste", f"La palabra era {self.hidden_word}. ¡Inténtalo de nuevo!")
-            self.master.destroy()
-            self.master.quit()
+            self.row = self.row + 1
+            if self.hidden_word == guess:
+                mixer.music.load("./assets/sounds/win.mp3")
+                mixer.music.play()
+                messagebox.showinfo("Ganaste", "¡Felicidades! Ganaste el DuckWordle")
+                self.master.destroy()
+                self.master.quit()
+            elif self.row == 6 and self.hidden_word != guess:
+                mixer.music.load("./assets/sounds/quack.mp3")
+                mixer.music.play()
+                messagebox.showinfo("Perdiste", f"La palabra era {self.hidden_word}. ¡Inténtalo de nuevo!")
+                self.master.destroy()
+                self.master.quit()
+            else:
+                mixer.music.load("./assets/sounds/quack.mp3")
+                mixer.music.play()
