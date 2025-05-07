@@ -48,19 +48,30 @@ class DuckWordle(Frame):
             bd=0, width=50, height=50, relief="sunken")
         self.button.bind("<Enter>", self.on_enter)
         self.button.bind("<Leave>", self.on_leave)
-        self.button.pack(side="right", padx=20)
+        self.button.pack(side="right", padx=10)
+
+        erase_path = "./assets/images/erase.png"
+        self.erase = PhotoImage(file=erase_path)
+
+        self.erase_button = Button(
+            self.down_bar_frame, command=lambda:self.guess.set(""), image=self.erase, bg="#E2E8F0",
+            activebackground="#A9AEB4", activeforeground="white",
+            bd=0, width=50, height=50, relief="sunken")
+        self.erase_button.bind("<Enter>", self.on_enter)
+        self.erase_button.bind("<Leave>", self.on_leave)
+        self.erase_button.pack(side="right", padx=10)
     
         self.entry = Entry(
             self.down_bar_frame, font=("Arial", "20", "bold"), textvariable=self.guess,
             bd=0, bg="#E2E8F0", justify="center")
-        self.entry.pack(side="bottom", pady=10, padx=20)
+        self.entry.pack(side="bottom", pady=10, padx=10)
         self.entry.config(width=7)
 
     def on_enter(self, event):
-        self.button.config(bg="#A9AEB4")
+        event.widget.config(bg="#A9AEB4")
 
     def on_leave(self, event):
-        self.button.config(bg="#E2E8F0")
+        event.widget.config(bg="#E2E8F0")
 
     def submit_word(self):
         guess = self.guess.get().lower()
