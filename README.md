@@ -6,7 +6,7 @@
 
 **DuckWordle** is the classic Wordle game where you must guess a five-letter word, but with a twist: all the words are related to **ducks**. This repository was created for recreational purposes and as part of the course *Algorithms and Computational Systems (IIC1001)* in the Bachelor's Degree in Computer Science at the Pontificia Universidad Católica de Chile.
 
-## Desarrollo
+## Development
 
 | Name | GitHub | Email |
 | -- | -- | -- |
@@ -14,7 +14,7 @@
 
 > This project has been fully developed by me.
 
-## Instalación
+## Installation
 
 > [!IMPORTANT]
 > **Python 3 or higher is required**
