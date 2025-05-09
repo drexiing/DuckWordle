@@ -1,0 +1,76 @@
+\section{Explicación de los Algoritmos}
+
+\noindent Los algoritmos de este programa han sido desarrollados completamente desde cero por mí. De todos ellos, uno de los que más desafíos me presentó —y que considero especialmente destacable— fue el siguiente:
+
+\begin{lstlisting}
+def color\_match(self, guess: str):
+    """
+    Checks which characters in the user's word match the hidden word,
+    and changes the colors of the boxes.
+
+    Parameters:
+        self (`self`): The instance of DuckWordle class.
+        guess (`str`): The guessed word.
+    """
+    char\_list = list(self.hidden\_word)
+    edited\_word = ""
+    
+    for c1, c2 in zip(self.hidden\_word, guess):
+        if c1 == c2:
+            edited\_word += c1
+        else:
+            edited\_word += "#"
+
+    for i, (c1, c2) in enumerate(zip(self.hidden\_word, guess)):
+        self.boxes = Label(
+            self.boxes\_frame, width=4, height=2, bg=self.gray,
+            text=c2.upper(),
+            font=font.Font(family="Arial", size=15, weight="bold"),
+            fg="white", highlightthickness=2, highlightbackground=self.gray
+        )
+        self.boxes.grid(column=i, row=self.row, padx=3, pady=3)
+        
+        # Right position (green)
+        if c1 == c2:
+            self.boxes["bg"] = self.green
+            self.boxes["highlightbackground"] = self.green
+            continue
+
+        # Not in hidden word (gray)
+        if (c2 not in self.hidden\_word) or
+        (char\_list.count(c2) <= edited\_word.count(c2)):
+            continue
+
+        # Bad position in hidden word (yellow)
+        self.boxes["bg"] = self.yellow
+        self.boxes["highlightbackground"] = self.yellow
+        char\_list.remove(c2)
+\end{lstlisting}
+
+\noindent Este código fue especialmente complejo de implementar al principio, debido a la dificultad de evitar falsos positivos al asignar colores a las letras. Sin embargo, tras varios intentos, logré una versión funcional y precisa.
+
+\bigskip
+
+\noindent El método \texttt{color\_match} tiene como objetivo analizar la palabra ingresada por el usuario y compararla con la palabra oculta del juego. A partir de esa comparación, se modifica el color de las casillas gráficas para indicar el grado de acierto del intento.
+
+\bigskip
+
+\noindent Primero, se transforma la palabra oculta (\texttt{self.hidden\_word}) en una lista de caracteres (\texttt{char\_list}) para poder manipularla con mayor flexibilidad. Luego, se inicializa una cadena llamada \texttt{edited\_word}, que almacenará el resultado parcial del análisis.
+
+\bigskip
+
+\noindent En el primer bucle \texttt{for}, se comparan letra por letra ambas palabras usando la función \texttt{zip()}. Si el carácter de la palabra oculta coincide con el carácter correspondiente de la palabra ingresada, se añade esa letra a \texttt{edited\_word}; de lo contrario, se añade el símbolo \texttt{\#}. Esto permite registrar únicamente los aciertos exactos.
+
+\bigskip
+
+\noindent A continuación, se ejecuta un segundo bucle, también con \texttt{zip()}, pero esta vez usando \texttt{enumerate()} para obtener el índice de cada letra. En cada iteración, se crea un nuevo objeto \texttt{Label}, que representa visualmente la letra correspondiente. Este objeto se configura con un tamaño específico, fuente, color de texto y de fondo, y se posiciona dentro de la interfaz mediante el método \texttt{grid}.
+
+\noindent Luego, se aplica la lógica de color:
+
+\begin{itemize}
+\item Si la letra coincide exactamente en posición y contenido (\texttt{c1 == c2}), se colorea la casilla de \textbf{verde}, indicando un acierto total.
+\item Si la letra no aparece en la palabra oculta, o ya ha sido contabilizada como coincidencia en una posición previa (controlado mediante la condición \texttt{char\_list.count(c2) <= edited\_word.count(c2)}), se mantiene en \textbf{gris}, indicando un error o repetición innecesaria.
+\item Si la letra sí está en la palabra oculta pero en una posición incorrecta, se marca con \textbf{amarillo}. Para evitar que una misma letra se cuente varias veces, se elimina de la lista \texttt{char\_list} mediante \texttt{char\_list.remove(c2)}.
+\end{itemize}
+
+\noindent De este modo, logré desarrollar un algoritmo funcional para mi juego de Wordle.
